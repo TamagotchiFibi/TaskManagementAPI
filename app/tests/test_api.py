@@ -530,9 +530,6 @@ def test_mark_notification_read(client, test_user_data, registered_user, auth_he
     )
     assert response.status_code == 200
     
-    # Дожидаемся завершения транзакции
-    db_session.commit()
-    
     # Получаем список уведомлений
     response = client.get(
         f"{settings.API_V1_STR}/notifications",
@@ -720,7 +717,7 @@ def test_redis_flushall(redis_client):
     redis_client.flushall()
     assert len(redis_client.keys("*")) == 0
 
-def test_notifications_caching(client, test_user_data, registered_user, auth_headers, redis_client, db_session):
+def test_notifications_caching(client, test_user_data, registered_user, auth_headers, redis_client):
     """Тест кэширования уведомлений"""
     # Создаем тестовую задачу, которая создаст уведомление
     task_data = {
@@ -735,9 +732,6 @@ def test_notifications_caching(client, test_user_data, registered_user, auth_hea
         headers=auth_headers
     )
     assert response.status_code == 200
-    
-    # Дожидаемся завершения транзакции
-    db_session.commit()
     
     # Первый запрос - данные берутся из БД и кэшируются
     response = client.get(
@@ -758,7 +752,7 @@ def test_notifications_caching(client, test_user_data, registered_user, auth_hea
     assert ttl > 0
     assert ttl <= settings.CACHE_TTL
 
-def test_notifications_cache_expiration(client, test_user_data, registered_user, auth_headers, redis_client, db_session):
+def test_notifications_cache_expiration(client, test_user_data, registered_user, auth_headers, redis_client):
     """Тест истечения срока действия кэша уведомлений"""
     # Создаем тестовую задачу, которая создаст уведомление
     task_data = {
@@ -773,9 +767,6 @@ def test_notifications_cache_expiration(client, test_user_data, registered_user,
         headers=auth_headers
     )
     assert response.status_code == 200
-    
-    # Дожидаемся завершения транзакции
-    db_session.commit()
     
     # Первый запрос - данные берутся из БД и кэшируются
     response = client.get(
@@ -792,8 +783,8 @@ def test_notifications_cache_expiration(client, test_user_data, registered_user,
     assert ttl > 0
     assert ttl <= settings.CACHE_TTL
     
-    # Удаляем кэш
-    redis_client.delete(cache_key)
+    # Ждем истечения срока действия кэша
+    time.sleep(ttl + 0.1)
     
-    # Проверяем, что кэш удален
+    # Проверяем, что кэш истек
     assert redis_client.get(cache_key) is None 

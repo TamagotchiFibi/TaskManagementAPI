@@ -197,14 +197,7 @@ MIT License - смотрите файл [LICENSE](LICENSE)
 
 ## Авторы
 
-- Ваше имя - your.email@example.com
-
-## Благодарности
-
-- FastAPI за отличный фреймворк
-- SQLAlchemy за мощный ORM
-- Redis за быстрое кэширование
-- Всем контрибьюторам проекта
+shakhaaaeva@gmail.com
 
 ## Поддержка
 
@@ -213,4 +206,4 @@ MIT License - смотрите файл [LICENSE](LICENSE)
 2. Создайте новый issue с подробным описанием проблемы
 3. Свяжитесь с автором по email
 
-Проект доступен на [GitHub](https://github.com/yourusername/task-management-api) 
+Проект доступен на [GitHub](https://github.com/TamagotchiFibi/task-management-api) 
