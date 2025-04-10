@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: task-management-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app.wsgi:app
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: task-management-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: task-management-redis
+          type: redis
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "30"
+      - key: REFRESH_TOKEN_EXPIRE_DAYS
+        value: "7"
+      - key: MAX_LOGIN_ATTEMPTS
+        value: "5"
+      - key: LOCKOUT_TIME
+        value: "15"
+      - key: RATE_LIMIT
+        value: "100"
+
+databases:
+  - name: task-management-db
+    databaseName: task_management
+    user: task_management_user
+    plan: free
+
+redis:
+  - name: task-management-redis
+    plan: free 

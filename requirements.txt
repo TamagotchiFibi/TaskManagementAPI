@@ -19,4 +19,5 @@ isort==5.13.2
 mypy==1.8.0
 flake8==7.0.0
 psycopg2-binary==2.9.9
-gunicorn==21.2.0 
+gunicorn==21.2.0
+alembic==1.13.1 
