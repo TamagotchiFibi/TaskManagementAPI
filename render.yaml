@@ -3,7 +3,7 @@ services:
     name: task-management-api
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app.wsgi:app
+    startCommand: gunicorn wsgi:app
     envVars:
       - key: DATABASE_URL
         fromDatabase:
